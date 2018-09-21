@@ -167,12 +167,14 @@ class RBTree {
             if (!result) {
                 return false;
             }
+            this._setHeight(root);
             return result;
         } else { //在右子树上删除
             var result = this._delete(root.rChild, key);
             if (!result) {
                 return false;
             }
+            this._setHeight(root);
             return result;
         }
     }
@@ -327,13 +329,9 @@ class RBTree {
                     pNode.color = 0;
                     this._rRotate(pNode.rChild);
                     this._lRotate(pNode);
-                } else if (pNode.color == 1 && (pNode.lChild || pNode.rChild)) { //父节点为红色
+                } else if (pNode.color == 1) { //父节点为红色
                     pNode.color = 0;
-                    if (pNode.lChild) {
-                        pNode.lChild.color = 1;
-                    } else {
-                        pNode.rChild.color = 1;
-                    }
+                    pNode.rChild && (pNode.rChild.color = 1);
                 } else {
                     pNode.rChild && (pNode.rChild.color = 1);
                     this._deleteBalance(pNode);
@@ -354,13 +352,9 @@ class RBTree {
                     pNode.color = 0;
                     this._lRotate(pNode.lChild);
                     this._rRotate(pNode);
-                } else if (pNode.color == 1 && (pNode.lChild || pNode.rChild)) { //父节点为红色
+                } else if (pNode.color == 1) { //父节点为红色
                     pNode.color = 0;
-                    if (pNode.lChild) {
-                        pNode.lChild.color = 1;
-                    } else {
-                        pNode.rChild.color = 1;
-                    }
+                    pNode.lChild && (pNode.lChild.color = 1);
                 } else {
                     pNode.lChild && (pNode.lChild.color = 1);
                     this._deleteBalance(pNode);
