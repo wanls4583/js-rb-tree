@@ -308,7 +308,11 @@ class RBTree {
             this._setHeight(node);
         }
     }
-    //删除后检查并调整树
+    /**
+     * 删除后检查并调整树
+     * @param  {RBNode}  pNode    已删除节点的父节点
+     * @param  {Boolean} isLchild 已删除节点是否为父节点的左子节点
+     */
     _deleteBalance(pNode, isLchild) {
         if (!pNode) {
             return;
@@ -334,15 +338,17 @@ class RBTree {
                 pNode.rChild.color = tmp;
                 pNode.rChild.rChild.color = 0;
                 this._lRotate(pNode);
-            } else if (pNode.rChild && pNode.color == 1) {
+            } else if (pNode.color == 1) { //父节点为红色
                 pNode.color = 0;
                 pNode.rChild.color = 1;
-            } else if (pNode.pNode) {
+            } else {
                 pNode.rChild && (pNode.rChild.color = 1);
-                if (pNode.pNode.lChild == pNode) {
-                    this._deleteBalance(pNode.pNode, true);
-                } else {
-                    this._deleteBalance(pNode.pNode, false);
+                if (pNode != this.root) {
+                    if (pNode.pNode.lChild == pNode) {
+                        this._deleteBalance(pNode.pNode, true);
+                    } else {
+                        this._deleteBalance(pNode.pNode, false);
+                    }
                 }
             }
         } else {
@@ -366,15 +372,17 @@ class RBTree {
                 pNode.lChild.color = tmp;
                 pNode.lChild.lChild.color = 0;
                 this._rRotate(pNode);
-            } else if (pNode.lChild && pNode.color == 1) {
+            } else if (pNode.color == 1) { //父节点为红色
                 pNode.color = 0;
                 pNode.lChild.color = 1;
-            } else if (pNode.pNode) {
+            } else {
                 pNode.lChild && (pNode.lChild.color = 1);
-                if (pNode.pNode.lChild == pNode) {
-                    this._deleteBalance(pNode.pNode, true);
-                } else {
-                    this._deleteBalance(pNode.pNode, false);
+                if (pNode != this.root) {
+                    if (pNode.pNode.lChild == pNode) {
+                        this._deleteBalance(pNode.pNode, true);
+                    } else {
+                        this._deleteBalance(pNode.pNode, false);
+                    }
                 }
             }
         }

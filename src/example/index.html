@@ -40,7 +40,7 @@
             tree.insert(i, 'data_' + i);
         }
         var retains = [];
-        //只保留4个随机数目
+        //只保留10个随机数目
         for (var i = 0; i < 10; i++) {
             retains.push((Math.random() * size) >> 0);
         }
@@ -50,6 +50,9 @@
                 tree.delete(i);
             }
         }
+        // for (var i =0; i < retains.length; i++) {
+        //     tree.delete(retains[i]);
+        // }
         draw(tree.root, 'canvas');
         console.log(tree.root);
         console.log('----------------------------------------');
@@ -156,6 +159,9 @@
         var ctx = document.querySelector(id ? '#' + id : '#canvas').getContext('2d');
         var width = 200;
         var height = 0;
+        ctx.lineWidth = 2;
+        ctx.font = "12px bold";
+        ctx.textAlign = 'center';
         if (size instanceof RBNode) {
             height = size.height + 1;
             _draw(size);
@@ -165,9 +171,6 @@
                 tree.insert(i, 'data_' + i);
             }
             height = tree.root.height + 1;
-            ctx.lineWidth = 2;
-            ctx.font = "12px bold";
-            ctx.textAlign = 'center';
             _draw(tree.root);
         }
 
