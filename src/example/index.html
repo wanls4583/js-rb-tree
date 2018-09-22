@@ -9,16 +9,11 @@
         margin: 0;
         padding: 0;
     }
-
-    canvas {
-        height: 100%;
-    }
     </style>
 </head>
 
 <body>
-    <canvas id="canvas" width="1200" height="800"></canvas>
-    <canvas id="canvas1" width="1200" height="800"></canvas>
+    <canvas id="canvas" width="1000" height="500"></canvas>
     <script type="text/javascript">
     var tree = new RBTree();
     var size = 10000;
@@ -40,23 +35,22 @@
     function testDelete() {
         console.log('%ctestDelete', 'color:red');
         var tree = new RBTree();
-        var size = 30;
+        var size = 1000;
         for (var i = 1; i <= size; i++) {
             tree.insert(i, 'data_' + i);
         }
-        draw(tree.root);
         var retains = [];
         //只保留4个随机数目
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 10; i++) {
             retains.push((Math.random() * size) >> 0);
         }
         console.log('retains', retains);
         for (var i = 1; i <= size; i++) {
-            if (retains.indexOf(i) == -1) {
+            if(retains.indexOf(i) == -1){
                 tree.delete(i);
             }
         }
-        draw(tree.root, 'canvas1');
+        draw(tree.root, 'canvas');
         console.log(tree.root);
         console.log('----------------------------------------');
     }
@@ -158,14 +152,14 @@
     }
 
     //draw tree
-    function draw(size,id) {
-        var ctx = document.querySelector(id ? '#'+id : '#canvas').getContext('2d');
+    function draw(size, id) {
+        var ctx = document.querySelector(id ? '#' + id : '#canvas').getContext('2d');
         var width = 200;
         var height = 0;
-        if(size instanceof RBNode){
+        if (size instanceof RBNode) {
             height = size.height + 1;
             _draw(size);
-        }else{
+        } else {
             var tree = new RBTree();
             for (var i = 1; i <= size; i++) {
                 tree.insert(i, 'data_' + i);
@@ -228,7 +222,6 @@
     testInsert();
     testSeach();
     testDelete();
-    // draw(20);
     </script>
 </body>
 

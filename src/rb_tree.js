@@ -35,7 +35,7 @@ class RBTree {
     }
     /**
      * 删除节点
-     * @param  {[type]}	 key 需要删除的节点的key
+     * @param  {[type]}  key 需要删除的节点的key
      * @return {RBNode}     被删除后的点
      */
     delete(key) {
@@ -101,9 +101,9 @@ class RBTree {
     }
     /**
      * 删除节点
-     * @param  {RBNode} root 	子树的根节点 
-     * @param  {[type]}	 key  	待删除的节点的key
-     * @return {Boolean}      	是否删除成功
+     * @param  {RBNode} root    子树的根节点 
+     * @param  {[type]}  key    待删除的节点的key
+     * @return {Boolean}        是否删除成功
      */
     _delete(root, key) {
         if (!root) {
@@ -114,15 +114,19 @@ class RBTree {
                 if (this.root == root) {
                     this.root = null;
                 } else {
-                    if (root.color == 0) { //待删除节点为黑色，需要调整树
-                        this._deleteBalance(root);
-                    }
                     if (root.pNode.lChild == root) {
                         root.pNode.lChild = null;
+                        this._setHeight(root.pNode);
+                        if (root.color == 0) { //待删除节点为黑色，需要调整树
+                            this._deleteBalance(root.pNode, true);
+                        }
                     } else {
                         root.pNode.rChild = null;
+                        this._setHeight(root.pNode);
+                        if (root.color == 0) { //待删除节点为黑色，需要调整树
+                            this._deleteBalance(root.pNode, false);
+                        }
                     }
-                    this._setHeight(root.pNode);
                 }
                 return root;
             } else if (!root.lChild || !root.rChild) { //没有右子树或者没有左子树
@@ -132,9 +136,7 @@ class RBTree {
                     this.root.color = 0;
                     this.root.pNode = null;
                 } else {
-                    if (root.color == 0 && child.color == 0) { //待删除节点为黑色，且其子节点也为黑色，需要调整树
-                        this._deleteBalance(root);
-                    } else if (root.color == 1 && child.color == 1) {
+                    if (root.color == 0) { //待删除节点为黑色，则其子节点必为红色，只需要更改子节点颜色
                         child.color = 0;
                     }
                     if (root.pNode.lChild == root) {
@@ -198,7 +200,7 @@ class RBTree {
     }
     /**
      * 右旋转
-     * @param  {RBNdde}	 node          需要旋转的节点
+     * @param  {RBNdde}  node          需要旋转的节点
      * @param  {Boolean} ifChangeColor 是否需要更改节点颜色
      */
     _rRotate(node, ifChangeColor) {
@@ -222,10 +224,12 @@ class RBTree {
             }
         }
         node.pNode = lc;
+        this._setHeight(node);
+        this._setHeight(lc);
     }
     /**
      * 左旋转
-     * @param  {RBNdde}	 node          需要旋转的节点
+     * @param  {RBNdde}  node          需要旋转的节点
      * @param  {Boolean} ifChangeColor 是否需要更改节点颜色
      */
     _lRotate(node, ifChangeColor) {
@@ -249,6 +253,8 @@ class RBTree {
             }
         }
         node.pNode = rc;
+        this._setHeight(node);
+        this._setHeight(rc);
     }
     //先左选转（不需要变色），再右选转
     _lrRotate(node) {
@@ -282,9 +288,6 @@ class RBTree {
                     this._rlRotate(node);
                 }
             }
-            //root将变lc的子节点，需要先更新root节点的高度
-            this._setHeight(node);
-            rc && this._setHeight(rc);
         } else if (node.lChild && node.lChild.color == 1 && (node.lChild.lChild && node.lChild.lChild.color == 1 || node.lChild.rChild && node.lChild.rChild.color == 1)) { //左子树不平衡，需要调整
             var lc = null;
             if (node.rChild && node.rChild.color == 1) { //如果右节点为红节点，不需要旋转，只需要改变颜色
@@ -301,63 +304,77 @@ class RBTree {
                     this._lrRotate(node);
                 }
             }
-            //root将变lc的子节点，需要先更新root节点的高度
-            this._setHeight(node);
-            lc && this._setHeight(lc);
         } else {
             this._setHeight(node);
         }
     }
     //删除后检查并调整树
-    _deleteBalance(node) {
-        if (!node.pNode) {
+    _deleteBalance(pNode, isLchild) {
+        if (!pNode) {
             return;
         }
-        var pNode = node.pNode;
-        if (pNode.lChild == node) {
+        if (isLchild) {
             if (pNode.rChild && pNode.rChild.color == 1) { //兄弟节点为红色
+                pNode.color = 1;
                 pNode.rChild.color = 0;
-                pNode.rChild.lChild && (pNode.rChild.lChild.color = 1);
                 this._lRotate(pNode);
-            } else {
-                if (pNode.rChild && pNode.rChild.rChild && pNode.rChild.rChild.color == 1) { //兄弟节点的右子节点为红色
-                    pNode.color = 0;
+                //将兄弟节点变成黑色节点后，再平衡
+                this._deleteBalance(pNode, true);
+            } else if (pNode.rChild && (pNode.rChild.lChild && pNode.rChild.lChild.color == 1 ||
+                    pNode.rChild.rChild && pNode.rChild.rChild.color == 1)) { //兄弟节点的子节点为红色
+
+                if (!pNode.rChild.rChild || pNode.rChild.rChild.color != 1) { //兄弟节点的左子节点不为红色
+                    pNode.rChild.lChild.color = 0;
                     pNode.rChild.color = 1;
-                    pNode.rChild.rChild.color = 0;
-                    this._lRotate(pNode);
-                } else if (pNode.rChild && pNode.rChild.lChild && pNode.rChild.lChild.color == 1) { //兄弟节点的左子节点为红色
-                    pNode.color = 0;
+                    //先右旋转
                     this._rRotate(pNode.rChild);
-                    this._lRotate(pNode);
-                } else if (pNode.color == 1) { //父节点为红色
-                    pNode.color = 0;
-                    pNode.rChild && (pNode.rChild.color = 1);
+                }
+                var tmp = pNode.color;
+                pNode.color = pNode.rChild.color;
+                pNode.rChild.color = tmp;
+                pNode.rChild.rChild.color = 0;
+                this._lRotate(pNode);
+            } else if (pNode.color == 1) {
+                pNode.color = 0;
+                pNode.rChild.color = 1;
+            } else if (pNode.pNode) {
+                pNode.rChild.color = 1;
+                if (pNode.pNode.lChild == pNode) {
+                    this._deleteBalance(pNode.pNode, true);
                 } else {
-                    pNode.rChild && (pNode.rChild.color = 1);
-                    this._deleteBalance(pNode);
+                    this._deleteBalance(pNode.pNode, false);
                 }
             }
         } else {
             if (pNode.lChild && pNode.lChild.color == 1) { //兄弟节点为红色
+                pNode.color = 1;
                 pNode.lChild.color = 0;
-                pNode.lChild.rChild && (pNode.lChild.rChild.color = 1);
                 this._rRotate(pNode);
-            } else {
-                if (pNode.lChild && pNode.lChild.lChild && pNode.lChild.lChild.color == 1) { //兄弟节点的左子节点为红色
-                    pNode.color = 0;
+                //将兄弟节点变成黑色节点后，再平衡
+                this._deleteBalance(pNode, false);
+            } else if (pNode.lChild && (pNode.lChild.lChild && pNode.lChild.lChild.color == 1 ||
+                    pNode.lChild.rChild && pNode.lChild.rChild.color == 1)) { //兄弟节点的子节点为红色
+
+                if (!pNode.lChild.lChild || pNode.lChild.lChild.color != 1) { //兄弟节点左子节点不为红色
+                    pNode.lChild.rChild.color = 0;
                     pNode.lChild.color = 1;
-                    pNode.lChild.lChild.color = 0;
-                    this._rRotate(pNode);
-                } else if (pNode.lChild && pNode.lChild.rChild && pNode.lChild.rChild.color == 1) { //兄弟节点的左子节点为红色
-                    pNode.color = 0;
+                    //先左旋转
                     this._lRotate(pNode.lChild);
-                    this._rRotate(pNode);
-                } else if (pNode.color == 1) { //父节点为红色
-                    pNode.color = 0;
-                    pNode.lChild && (pNode.lChild.color = 1);
+                }
+                var tmp = pNode.color;
+                pNode.color = pNode.lChild.color;
+                pNode.lChild.color = tmp;
+                pNode.lChild.lChild.color = 0;
+                this._rRotate(pNode);
+            } else if (pNode.color == 1) {
+                pNode.color = 0;
+                pNode.lChild.color = 1;
+            } else if (pNode.pNode) {
+                pNode.lChild.color = 1;
+                if (pNode.pNode.lChild == pNode) {
+                    this._deleteBalance(pNode.pNode, true);
                 } else {
-                    pNode.lChild && (pNode.lChild.color = 1);
-                    this._deleteBalance(pNode);
+                    this._deleteBalance(pNode.pNode, false);
                 }
             }
         }
