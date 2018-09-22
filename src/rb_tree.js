@@ -334,11 +334,11 @@ class RBTree {
                 pNode.rChild.color = tmp;
                 pNode.rChild.rChild.color = 0;
                 this._lRotate(pNode);
-            } else if (pNode.color == 1) {
+            } else if (pNode.rChild && pNode.color == 1) {
                 pNode.color = 0;
                 pNode.rChild.color = 1;
             } else if (pNode.pNode) {
-                pNode.rChild.color = 1;
+                pNode.rChild && (pNode.rChild.color = 1);
                 if (pNode.pNode.lChild == pNode) {
                     this._deleteBalance(pNode.pNode, true);
                 } else {
@@ -366,11 +366,11 @@ class RBTree {
                 pNode.lChild.color = tmp;
                 pNode.lChild.lChild.color = 0;
                 this._rRotate(pNode);
-            } else if (pNode.color == 1) {
+            } else if (pNode.lChild && pNode.color == 1) {
                 pNode.color = 0;
                 pNode.lChild.color = 1;
             } else if (pNode.pNode) {
-                pNode.lChild.color = 1;
+                pNode.lChild && (pNode.lChild.color = 1);
                 if (pNode.pNode.lChild == pNode) {
                     this._deleteBalance(pNode.pNode, true);
                 } else {
