@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8"></meta>
-    <script type="text/javascript" src="../rb_tree.js"></script>
+    <script type="text/javascript" src="../rb.js"></script>
     <style>
     html,
     body {
@@ -46,7 +46,7 @@
         }
         console.log('retains', retains);
         for (var i = 1; i <= size; i++) {
-            if(retains.indexOf(i) == -1){
+            if (retains.indexOf(i) == -1) {
                 tree.delete(i);
             }
         }

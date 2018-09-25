@@ -1,0 +1,23 @@
+{
+  "name": "js-rb-tree",
+  "version": "1.0.0",
+  "description": "A red-black-tree by javascript",
+  "main": "dist/rb.min.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wanls4583/js-rb-tree.git"
+  },
+  "keywords": [
+    "rb",
+    "rb-tree",
+    "js-rb",
+    "js-rb-tree"
+  ],
+  "author": "lisong",
+  "license": "ISC",
+  "devDependencies": {
+  },
+  "scripts": {
+    "build": "uglifyjs --compress --mangle --output dist/rb.min.js -- src/rb.js"
+  }
+}
