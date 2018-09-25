@@ -16,7 +16,7 @@
 ## 安装
 
 ```bash
-npm install js-avl-tree
+npm install js-rb-tree
 ```
 
 ## 案例
