@@ -32,7 +32,7 @@ _proto.insert = function(key, data) {
         return true;
     }
     return this._insert(this.root, node);
-}
+};
 
 /**
  * 删除节点
@@ -48,7 +48,7 @@ _proto.delete = function(key) {
         result.next.pre = result.pre;
     }
     return result;
-}
+};
 
 /**
  * 查找节点
@@ -57,7 +57,7 @@ _proto.delete = function(key) {
  */
 _proto.search = function(key) {
     return this._search(this.root, key);
-}
+};
 
 /**
  * 插入节点
@@ -101,7 +101,7 @@ _proto._insert = function(root, node) {
     this._setHeight(root);
 
     return true;
-}
+};
 
 /**
  * 删除节点
@@ -183,7 +183,7 @@ _proto._delete = function(root, key) {
         this._setHeight(root);
         return result;
     }
-}
+};
 
 /**
  * 搜索节点
@@ -202,7 +202,7 @@ _proto._search = function(root, key) {
     } else {
         return this._search(root.rChild, key);
     }
-}
+};
 
 /**
  * 右旋转
@@ -232,7 +232,7 @@ _proto._rRotate = function(node, ifChangeColor) {
     node.pNode = lc;
     this._setHeight(node);
     this._setHeight(lc);
-}
+};
 
 /**
  * 左旋转
@@ -262,7 +262,7 @@ _proto._lRotate = function(node, ifChangeColor) {
     node.pNode = rc;
     this._setHeight(node);
     this._setHeight(rc);
-}
+};
 
 //先左选转（不需要变色），再右选转
 _proto._lrRotate = function(node) {
@@ -270,7 +270,7 @@ _proto._lrRotate = function(node) {
     this._lRotate(node.lChild);
     //右旋转
     this._rRotate(node, true);
-}
+};
 
 //先右旋转（不需要变色），再左旋转
 _proto._rlRotate = function(node) {
@@ -278,12 +278,11 @@ _proto._rlRotate = function(node) {
     this._lRotate(node.rChild);
     //左旋转
     this._lRotate(node, true);
-}
+};
 
 //插入后检查并调整树
 _proto._insertBalance = function(node) {
     if (node.rChild && node.rChild.color == 1 && (node.rChild.lChild && node.rChild.lChild.color == 1 || node.rChild.rChild && node.rChild.rChild.color == 1)) { //右子树不平衡，需要调整
-        var rc = null;
         if (node.lChild && node.lChild.color == 1) { //如果左节点为红节点，不需要旋转，只需要改变颜色
             node.lChild.color = 0;
             node.rChild.color = 0;
@@ -291,7 +290,6 @@ _proto._insertBalance = function(node) {
                 node.color = 1;
             }
         } else {
-            rc = node.rChild;
             if (node.rChild.rChild && node.rChild.rChild.color == 1) { //左旋转
                 this._lRotate(node, true);
             } else { //先右旋转，再左旋转
@@ -299,7 +297,6 @@ _proto._insertBalance = function(node) {
             }
         }
     } else if (node.lChild && node.lChild.color == 1 && (node.lChild.lChild && node.lChild.lChild.color == 1 || node.lChild.rChild && node.lChild.rChild.color == 1)) { //左子树不平衡，需要调整
-        var lc = null;
         if (node.rChild && node.rChild.color == 1) { //如果右节点为红节点，不需要旋转，只需要改变颜色
             node.lChild.color = 0;
             node.rChild.color = 0;
@@ -307,7 +304,6 @@ _proto._insertBalance = function(node) {
                 node.color = 1;
             }
         } else {
-            lc = node.lChild;
             if (node.lChild.lChild && node.lChild.lChild.color == 1) { //左旋转
                 this._rRotate(node, true);
             } else { //先左旋转，再右旋转
@@ -317,7 +313,7 @@ _proto._insertBalance = function(node) {
     } else {
         this._setHeight(node);
     }
-}
+};
 
 /**
  * 删除后检查并调整树
@@ -397,7 +393,7 @@ _proto._deleteBalance = function(pNode, isLchild) {
             }
         }
     }
-}
+};
 
 /**
  * 交换两个节点
@@ -413,7 +409,7 @@ _proto._change = function(node1, node2) {
 
     node2.key = key;
     node2.data = data;
-}
+};
 
 //获取树的高度
 _proto._getHeight = function(node) {
@@ -421,7 +417,7 @@ _proto._getHeight = function(node) {
         return 0;
     }
     return node.height;
-}
+};
 
 //设置树的高度
 _proto._setHeight = function(node) {
@@ -431,4 +427,4 @@ _proto._setHeight = function(node) {
         height = 0;
     }
     node.height = height;
-}
+};

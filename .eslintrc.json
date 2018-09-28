@@ -1,0 +1,35 @@
+{
+    "rules":
+    {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "no-extra-semi": [
+            "error"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-undef": [
+            "error"
+        ],
+        "no-unused-vars": [
+            "error"
+        ],
+        "semi-spacing": ["error",
+        {
+            "before": false,
+            "after": false
+        }]
+    }
+}
