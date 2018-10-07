@@ -334,7 +334,7 @@ _proto._deleteBalance = function(pNode, isLchild) {
         } else if (pNode.rChild && (pNode.rChild.lChild && pNode.rChild.lChild.color == 1 ||
                 pNode.rChild.rChild && pNode.rChild.rChild.color == 1)) { //兄弟节点的子节点为红色
 
-            if (!pNode.rChild.rChild || pNode.rChild.rChild.color != 1) { //兄弟节点的左子节点不为红色
+            if (!pNode.rChild.rChild || pNode.rChild.rChild.color != 1) { //兄弟节点的右子节点不为红色
                 pNode.rChild.lChild.color = 0;
                 pNode.rChild.color = 1;
                 //先右旋转
